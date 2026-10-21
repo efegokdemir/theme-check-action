@@ -47,6 +47,7 @@ async function run() {
             report,
             fileDiff?.changedLines || {},
             cwd,
+            themeRoot,
           )
         : report;
       await addAnnotations(

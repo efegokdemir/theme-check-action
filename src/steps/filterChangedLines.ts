@@ -6,6 +6,7 @@ export function filterReportsToChangedLines(
   reports: ThemeCheckReport[],
   changedLines: Record<string, LineRange[]>,
   repositoryRoot: string,
+  reportRoot = repositoryRoot,
 ): ThemeCheckReport[] {
   return reports.map((report) => {
     const originalCounts = countOffenses(report.offenses);
@@ -36,7 +37,7 @@ export function filterReportsToChangedLines(
     const reportPath = toGitPath(
       path.relative(
         repositoryRoot,
-        path.resolve(repositoryRoot, report.path),
+        path.resolve(reportRoot, report.path),
       ),
     );
     const ranges = changedLines[reportPath] || [];

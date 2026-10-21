@@ -162,6 +162,28 @@ test('filters unchanged files but keeps offenses without a usable location', () 
   assert.equal(unchangedReport.warningCount, 0);
 });
 
+test('matches relative report paths when the theme root is a repository subdirectory', () => {
+  const repositoryRoot = '/repo';
+  const themeRoot = path.join(repositoryRoot, 'dawn');
+  const [report] = filterReportsToChangedLines(
+    [
+      {
+        path: 'layout/theme.liquid',
+        offenses: [offense('error', 0, 0)],
+        errorCount: 1,
+        warningCount: 0,
+        infoCount: 0,
+      },
+    ],
+    { 'dawn/layout/theme.liquid': [{ start: 1, end: 1 }] },
+    repositoryRoot,
+    themeRoot,
+  );
+
+  assert.equal(report.offenses.length, 1);
+  assert.equal(report.errorCount, 1);
+});
+
 test('fails closed when report counts do not match its offenses', () => {
   const [report] = filterReportsToChangedLines(
     [
